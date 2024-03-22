@@ -1,6 +1,7 @@
 CREATE TABLE sale (
     id SERIAL PRIMARY KEY,
-    customer_id SERIAL REFERENCES customer(id)
+    customer_id SERIAL REFERENCES customer(id),
+    store SERIAL REFERENCES store(id)
 );
 
 CREATE TABLE sale_item (

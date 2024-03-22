@@ -1,0 +1,5 @@
+CREATE TABLE store (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    location VARCHAR NOT NULL
+)
