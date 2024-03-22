@@ -23,7 +23,27 @@ The aim for this demo integration is for a hypothetical end-to-end transactional
 Therefore, we will generate dummy data that should resemble the typical information an end-to-end provider will host.
 
 - Customer/loyalty
+  - First/Last Name
+  - Postcode
+  - Email
+  - Phone number
+  - Temporary profile
 - Sales
+  - SaleItem
+    - Product ID
+    - Modifier ID (multiple)
+    - Quantity
+  - Sale
+    - SaleItem (multiple)
+    - Customer ID
 - Products
+  - Name
+  - Description
+  - Price
+  - Applicable modifiers (multiple IDs)
 - Modifiers
+  - Name
+  - Price
 - Stores
+  - Name
+  - Location
