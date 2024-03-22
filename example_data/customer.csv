@@ -1,2 +1,21 @@
-id	first_name	last_name	email	phone
-1	John	Doe	john.doe@mail.com	0412329412
+id,	first_name,	last_name,	email,	phone
+1,	John,	Doe,	john.doe@mail.com,	0412329412
+2,Jane,Smith,,555-1234
+3,Michael,Johnson,michaelj@gmail.com,
+4,Emily,Brown,,555-5678
+5,Chris,Taylor,ctaylor@yahoo.com,
+6,Sarah,Clark,,555-9876
+7,David,Martinez,dmartinez@gmail.com,
+8,Jessica,Lee,,555-4321
+9,Alex,Anderson,alex.anderson@example.com,
+10,Amanda,Wilson,,555-8765
+11,Ryan,Thomas,rthomas@gmail.com,
+12,Jennifer,White,,555-2345
+13,Matthew,Walker,mwalker@yahoo.com,
+14,Laura,Garcia,,555-6789
+15,Daniel,Allen,dallen@example.com,
+16,Stephanie,Perez,,555-3456
+17,Kevin,Scott,kscott@gmail.com,
+18,Melissa,Young,,555-7890
+19,Jason,Hernandez,jasonh@example.com,
+20,Nicole,Miller,,555-4567
