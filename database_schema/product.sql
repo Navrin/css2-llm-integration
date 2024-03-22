@@ -1,5 +1,3 @@
-DROP TABLE product CASCADE ;
-
 CREATE TABLE product (
     id SERIAL PRIMARY KEY UNIQUE,
     name varchar(50) NOT NULL,

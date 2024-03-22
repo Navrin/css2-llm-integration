@@ -1,4 +1,3 @@
-DROP TABLE modifier;
 
 CREATE TABLE modifier (
     id SERIAL PRIMARY KEY,
