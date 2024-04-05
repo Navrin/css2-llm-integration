@@ -7,7 +7,7 @@ class OpenAIAdaptor(LLMAdaptor):
     client: AsyncOpenAI
 
     def __init__(self, model="gpt-3.5-turbo"):
-        config = dotenv_values(".env")
+        config = dotenv_values("../.env")
         key = config["OPENAI_KEY"]
         self.model = model
         self.client = AsyncOpenAI(api_key=key)
