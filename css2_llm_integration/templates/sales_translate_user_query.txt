@@ -1,0 +1,6 @@
+Using the following database schema, can you generate an SQL query that would answer the prompt "{{ user_prompt }}"?
+Answer __only__ in json, with the generated SQL as the "query" field.
+
+The database schema is as follows:
+
+{{ db_schema }}
