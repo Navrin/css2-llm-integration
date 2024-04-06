@@ -6,3 +6,4 @@ COPY product_modifier FROM '/data/1-product_modifier.csv' DELIMITER ',' CSV HEAD
 COPY sale FROM '/data/1-sale.csv' DELIMITER ',' CSV HEADER;
 COPY sale_item FROM '/data/2-sale_item.csv' DELIMITER ',' CSV HEADER;
 COPY sale_item_modifier FROM '/data/3-sale_item_modifier.csv' DELIMITER ',' CSV HEADER;
+COPY product_review FROM '/data/4-product_review.csv' DELIMITER  ',' CSV HEADER;

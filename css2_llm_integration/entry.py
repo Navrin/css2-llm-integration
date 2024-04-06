@@ -21,6 +21,8 @@ env = Environment(
 sales_gen = env.get_template("sales_translate_user_query.txt")
 sales_format_response = env.get_template("sales_format_data.txt")
 get_question_type = env.get_template("determine_query_kind.txt")
+reviews_gen = env.get_template("reviews_pull_data.txt")
+reviews_analyse = env.get_template("reviews_analyse_reviews.txt")
 
 
 schemas = os.listdir(f"{os.environ['PROJECT_ROOT']}/database_schema")
@@ -72,6 +74,26 @@ async def main():
 
                     break
             elif "reviews" in result:
-                break
+                with st.chat_message("robot"):
+                    try:
+                        reviews_sql_prompt = reviews_gen.render(user_prompt=prompt, db_schema="\n\n".join(all_schemas))
+                        reviews_sql = await active_adaptor.do_query(reviews_sql_prompt, response_json=True)
+                        query_json = json.loads(reviews_sql)
+                        st.json(query_json)
+                        with db_conn.cursor() as cur:
+                            cur.execute(query_json["query"])
+                            results = cur.fetchall()
+                        as_json = json.dumps(results, indent=4)
+                        #st.json(as_json)
+                        end_response_prompt = reviews_analyse.render(user_prompt=prompt, reviews=as_json)
+
+                        end_answer = await active_adaptor.do_query(end_response_prompt)
+
+                        st.write(end_answer)
+                    except Exception as e:
+                        st.write("Something went wrong!")
+                        # raising error for debug purposes
+                        raise e
+                    break
             continue
 asyncio.run(main())

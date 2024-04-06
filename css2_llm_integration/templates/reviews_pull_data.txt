@@ -1,0 +1,8 @@
+Using the following database schema, generate an SQL query that would return all of the reviews needed to answer the question "{{ user_prompt }}"?
+
+The database schema is as follows:
+
+{{ db_schema }}
+
+You are to format the response as a json object, with the generated SQL as the "query" field.
+You must only answer the json and nothing else.
