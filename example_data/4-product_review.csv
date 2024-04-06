@@ -1,0 +1,41 @@
+id,product_id,customer_name,review,rating
+1,1,Alice,"Absolutely loved the Arctic Freeze Blueberry Shake! It's so refreshing and the blueberry flavor is just perfect.",5
+2,1,Bob,"The Arctic Freeze Blueberry Shake was okay. I expected a stronger blueberry flavor though.",3
+3,2,Charlie,"Bubble Blast Bubble Tea is my new favorite drink! The tapioca pearls add such a fun texture to the tea.",5
+4,2,Diana,"I found the Bubble Blast Bubble Tea to be too sweet for my taste. The tapioca pearls were nice though.",3
+5,3,Ethan,"Strawberry Dream Smoothie is a dream come true! So creamy and the perfect balance of sweetness.",5
+6,3,Fiona,"I was expecting the Strawberry Dream Smoothie to be fresher tasting. It was a bit too artificial for me.",3
+7,4,Grace,"Tropical Paradise Smoothie is like a vacation in a cup! The combination of pineapple, mango, and coconut is divine.",5
+8,4,Henry,"I didn't enjoy the Tropical Paradise Smoothie as much as I thought I would. The flavors didn't blend well together.",2
+9,5,Ivy,"Coco Loco Coconut Shake is my guilty pleasure! Creamy, coconutty, and absolutely delicious.",5
+10,5,Jack,"The Coco Loco Coconut Shake was too heavy for my liking. I prefer lighter beverages.",2
+11,6,Kate,"Peachy Keen Bubble Tea is so refreshing! The real peaches make all the difference in flavor.",4
+12,6,Liam,"I found the Peachy Keen Bubble Tea to be too bland. It lacked the peach flavor I was expecting.",2
+13,7,Mia,"Mango Tango Smoothie is a burst of tropical goodness! Perfectly sweet and tangy.",5
+14,7,Noah,"The Mango Tango Smoothie was too sour for my taste. I was hoping for a sweeter mango flavor.",3
+15,8,Olivia,"Matcha Madness Bubble Tea is a matcha lover's dream! Creamy and perfectly balanced.",5
+16,8,Peter,"The Matcha Madness Bubble Tea was too bitter for me. I prefer my drinks sweeter.",2
+17,9,Quinn,"Berry Blast Frozen Shake is packed with berry goodness! Perfectly sweet and creamy.",5
+18,9,Rachel,"I found the Berry Blast Frozen Shake to be too icy. It was hard to taste the flavors with all the ice chunks.",3
+19,10,Stella,"Kiwi Kiss Smoothie is so refreshing! The kiwi flavor is just the right amount of tangy.",4
+20,10,Thomas,"The Kiwi Kiss Smoothie was too tart for my liking. I prefer sweeter smoothies.",2
+21,11,Uma,"Lychee Love Bubble Tea is a unique and refreshing beverage! The lychee flavor is exotic and delicious.",5
+22,11,Victor,"I didn't enjoy the Lychee Love Bubble Tea. The lychee flavor was too overpowering for me.",2
+23,12,Wendy,"Pineapple Punch Smoothie is a tropical delight! Perfectly sweet and refreshing.",5
+24,12,Xavier,"The Pineapple Punch Smoothie was too bland for me. I was expecting a stronger pineapple flavor.",3
+25,13,Yara,"Vanilla Velvet Frozen Shake is pure indulgence! Creamy, rich, and absolutely divine.",5
+26,13,Zach,"The Vanilla Velvet Frozen Shake was too sweet for my liking. I prefer less sugary drinks.",3
+27,14,Amelia,"Blueberry Bliss Bubble Tea is a burst of fruity flavor! Perfect for satisfying my sweet tooth.",4
+28,14,Benjamin,"I found the Blueberry Bliss Bubble Tea to be too artificial tasting. It didn't taste like real blueberries.",2
+29,15,Chloe,"Coconut Craze Smoothie is like a tropical vacation in a cup! Creamy, coconutty, and utterly delicious.",5
+30,15,David,"The Coconut Craze Smoothie was too thick for me. I prefer lighter beverages.",3
+31,16,Emily,"Peach Paradise Frozen Shake is heavenly! The perfect blend of sweet peaches and creamy vanilla.",5
+32,16,Frank,"I found the Peach Paradise Frozen Shake to be too sweet. It was overpoweringly sugary.",3
+33,17,Gabriella,"Passionfruit Passion Bubble Tea is a burst of tropical sweetness! I love the exotic flavor of passionfruit.",5
+34,17,Hugo,"The Passionfruit Passion Bubble Tea was too sour for my taste. I prefer sweeter beverages.",3
+35,18,Isabella,"Raspberry Rapture Smoothie is a fruity delight! Perfectly blended and bursting with raspberry flavor.",4
+36,18,James,"I found the Raspberry Rapture Smoothie to be too watery. It lacked the creamy texture I expected.",2
+37,19,Kayla,"Strawberry Sensation Frozen Shake is strawberry perfection! Creamy, sweet, and utterly delicious.",5
+38,19,Lucas,"The Strawberry Sensation Frozen Shake was too artificial tasting for me. It didn't taste like real strawberries.",3
+39,20,Mia,"Taro Temptation Bubble Tea is a creamy delight! I love the unique flavor of taro root.",4
+40,20,Nathan,"I found the Taro Temptation Bubble Tea to be too bland. It lacked the sweetness I was expecting.",2

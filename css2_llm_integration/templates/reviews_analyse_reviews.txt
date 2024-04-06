@@ -1,0 +1,3 @@
+Please use the reviews below to answer the query "{{user_prompt}}".
+
+{{reviews}}
