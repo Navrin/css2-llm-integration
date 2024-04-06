@@ -8,10 +8,10 @@ import adaptors
 from jinja2 import Environment, PackageLoader, select_autoescape
 import psycopg2
 
-dotenv.load_dotenv("../.env")
+dotenv.load_dotenv(f"{os.environ['PROJECT_ROOT']}/.env")
 cfg = dotenv.dotenv_values()
 
-db_conn = psycopg2.connect(f"dbname={cfg['DB_NAME']}")
+db_conn =  psycopg2.connect(f"host={cfg['DB_HOST']} dbname={cfg['DB_NAME']} user={cfg['DB_USER']} password={cfg['DB_PASSWORD']}")
 
 env = Environment(
     loader=PackageLoader("css2_llm_integration", "templates"),
@@ -23,11 +23,11 @@ sales_format_response = env.get_template("sales_format_data.txt")
 get_question_type = env.get_template("determine_query_kind.txt")
 
 
-schemas = os.listdir("../database_schema")
+schemas = os.listdir(f"{os.environ['PROJECT_ROOT']}/database_schema")
 print(schemas)
 all_schemas = []
 for schema in schemas:
-    with open(f"../database_schema/{schema}", "r") as f:
+    with open(f"{os.environ['PROJECT_ROOT']}/database_schema/{schema}", "r") as f:
         all_schemas.append("".join(f.readlines()))
 
 with st.chat_message("robot"):
@@ -52,7 +52,7 @@ async def main():
                 with st.chat_message("robot"):
                     try:
                         sales_sql_prompt = sales_gen.render(user_prompt=prompt, db_schema="\n\n".join(all_schemas))
-                        sales_sql = await active_adaptor.do_query(sales_sql_prompt)
+                        sales_sql = await active_adaptor.do_query(sales_sql_prompt, response_json=True)
                         query_json = json.loads(sales_sql)
                         st.json(query_json)
                         with db_conn.cursor() as cur:

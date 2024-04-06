@@ -4,7 +4,5 @@ The database schema is as follows:
 
 {{ db_schema }}
 
-Make sure that name information is included.
-
 You are to format the response as a json object, with the generated SQL as the "query" field.
 You must only answer the json and nothing else.

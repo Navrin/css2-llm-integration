@@ -2,5 +2,5 @@
 
 for filename in ../database_schema/*.sql; do
   [ -e "$filename" ] || continue
-  psql -p5432 "css2_llm" -U postgres -a -q -f $filename
+  psql -p5432 $DB_NAME -U $DB_USER -a -q -f $filename
 done

@@ -1,0 +1,41 @@
+services:
+  chat:
+    build: .
+    image: navrin/css2chat
+#    user: css2_llm
+    ports:
+      - "8501:8501"
+    expose:
+      - 8501
+    volumes:
+      - ./.env:/src/.env
+    depends_on:
+      - db
+    links:
+      - "db:postgres"
+    environment:
+      PROJECT_ROOT: "/src"
+
+#  create-data:
+#    image: ubuntu
+#    env_file:
+#      - .env
+#    working_dir: /src
+#    volumes:
+#      - ./db_build_scripts/build_data.sh:/src/build_data.sh
+#    command: ["/bin/bash", "/src/build_data.sh"]
+#    depends_on:
+#      - db
+  db:
+    image: "postgres:16.2-bookworm"
+    shm_size: 128mb
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./database_schema:/docker-entrypoint-initdb.d/
+      - ./example_data:/data
+    #ports:
+    #  - "5432:5432"

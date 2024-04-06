@@ -1,3 +1,4 @@
+
 ## Overview
 
 This demo will consist of 3 components:
@@ -48,6 +49,29 @@ Therefore, we will generate dummy data that should resemble the typical informat
   - Name
   - Location
 
+## How to run it.
+### Docker (recommended)
+You can run this demo via docker. Docker is a containerisation service that will make it easier to run the demo.
+
+The instructions here assume some knowledge of using the terminal. If you are on linux or mac, then the default terminals will suffice. If you are on windows, __use powershell__, and these commands should hopefully work. **Do not use cmd, it will not work**. 
+1. [Install docker.](https://docs.docker.com/engine/install/)
+2. clone the repo `git clone https://github.com/Navrin/css2-llm-integration.git` (if you do not have git you can install it [here](https://git-scm.com/downloads) or you can manually download the zip file from the github site and extract it, however, this is not recommended as you will not be able to contribute to the project code.)
+3. cd in `cd css2-llm-integration`
+4. __set up your .env file__: `touch .env` and then edit it with whatever program
+5. run docker via `docker compose up`
+
+If you make modifications to the code, you can rebuild the images using `docker compose build`. If you need to clear data, try `docker compose down` or `docker compose rm chat db` and then `docker compose up`.
+When running `docker compose up` you should have a URL that will let you run the app in the browser. 
+
+### Setting up your .env
+In the project root folder, you will need a `.env`. Here is an example base template. You will need to substitute in variables such as the API token.
+```
+OPENAI_KEY=<OPEN AI KEY GOES HERE>
+DB_NAME=css2_llm
+DB_HOST=postgres
+DB_PASSWORD=password
+DB_USER=css2_llm
+```
 ## Example Database Items
 
 ### Products
@@ -55,3 +79,5 @@ Therefore, we will generate dummy data that should resemble the typical informat
 | Name          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Price | Modifiers                |
 | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- | ------------------------ |
 | Arctic Freeze | Indulge in the refreshing taste of our Arctic Freeze Blueberry Shake. Made with plump, juicy blueberries and creamy vanilla ice cream, this frosty treat is sure to take your taste buds on a journey to the arctic. Perfect for hot summer days or as a sweet indulgence any time of year, our Arctic Freeze Blueberry Shake is a must-try for any blueberry lover. So go ahead, sip and savor the cool, fruity goodness of our Arctic Freeze Blueberry Shake today! | 9.99  | [Dairy Free], [Less Ice] |
+
+
