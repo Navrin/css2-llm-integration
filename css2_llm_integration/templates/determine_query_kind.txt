@@ -1,0 +1,10 @@
+Please determine the category of question the following query belongs in. There are two possible categories.
+
+Sales: associated with sales information, metrics, data and analysis.
+Reviews: associated with customer reviews, sentiment and summarization.
+
+Please answer with only the predicted category, in the form of either "sales" or "reviews".
+
+The query is as follows:
+
+{{ user_prompt }}

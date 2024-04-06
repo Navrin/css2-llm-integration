@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/database_schema/customer.sql" dialect="PostgreSQL" />
-    <file url="file://$PROJECT_DIR$/database_schema/init.sql" dialect="PostgreSQL" />
-    <file url="file://$PROJECT_DIR$/database_schema/modifier.sql" dialect="PostgreSQL" />
-    <file url="file://$PROJECT_DIR$/database_schema/product.sql" dialect="PostgreSQL" />
-    <file url="file://$PROJECT_DIR$/database_schema/sale.sql" dialect="PostgreSQL" />
-    <file url="file://$PROJECT_DIR$/database_schema/store.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/database_schema/00-init.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/database_schema/1-customer.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/database_schema/1-modifier.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/database_schema/1-product.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/database_schema/1-store.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/database_schema/2-sale.sql" dialect="PostgreSQL" />
     <file url="PROJECT" dialect="PostgreSQL" />
   </component>
 </project>
