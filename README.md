@@ -65,6 +65,8 @@ When running `docker compose up` you should have a URL that will let you run the
 
 ### Setting up your .env
 In the project root folder, you will need a `.env`. Here is an example base template. You will need to substitute in variables such as the API token.
+
+__If you are using docker, name your file `.env-docker`__. The docker compose file mount `.env-docker` as `.env`. This is because the `.env` files will differ slightly if you are hosting the bot directly (i.e local postgres). The example template will work for the docker version.
 ```
 OPENAI_KEY=<OPEN AI KEY GOES HERE>
 DB_NAME=css2_llm
