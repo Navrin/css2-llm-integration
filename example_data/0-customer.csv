@@ -1,4 +1,4 @@
-id,	first_name,	last_name,	email,	phone
+id,first_name,last_name,email,phone
 1,	John,	Doe,	john.doe@mail.com,	0412329412
 2,Jane,Smith,,555-1234
 3,Michael,Johnson,michaelj@gmail.com,

@@ -7,6 +7,7 @@ import os
 import adaptors
 from jinja2 import Environment, PackageLoader, select_autoescape
 import psycopg2
+from itertools import chain
 
 dotenv.load_dotenv(f"{os.environ['PROJECT_ROOT']}/.env")
 cfg = dotenv.dotenv_values()
@@ -32,8 +33,6 @@ for schema in schemas:
     with open(f"{os.environ['PROJECT_ROOT']}/database_schema/{schema}", "r") as f:
         all_schemas.append("".join(f.readlines()))
 
-with st.chat_message("robot"):
-    st.write("Hello. What is your query? I can answer questions about sales, or I can look at customer reviews for you.")
 
 active_adaptor = adaptors.OpenAIAdaptor()
 if "messages" not in st.session_state:
@@ -41,9 +40,47 @@ if "messages" not in st.session_state:
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
+if "set" not in st.session_state:
+
+    st.set_page_config(layout="wide")
+    st.session_state.set = True
+
 async def main():
-    prompter = st.chat_input("> What is your prompt?")
-    while True:
+    chat_col, input_col = st.columns(2)
+
+    # TODO: separate this code into an API and the UI.
+    with db_conn.cursor() as cur:
+        cur.execute("SELECT name FROM product")
+        product_query = cur.fetchall()
+        products = list(chain(*product_query))
+    with input_col:
+        with st.form(key="review_form"):
+            product_select = st.selectbox("Select a product *", products)
+            reviewer_name = st.text_input("Enter reviewer name", value=None)
+            review_text = st.text_area("Enter review text *", value=None)
+            score = st.slider("Select review score *", 1, 5, value=None)
+            add_review = st.form_submit_button("Add review")
+
+        if add_review:
+            required_list = [product_select, review_text, score]
+            any_empty = all(map(lambda x: x is None, required_list))
+            if any_empty:
+                st.error("At least one of the required fields is empty.")
+            else:
+                with db_conn.cursor() as cur:
+                    add_review = cur.execute("""
+                    INSERT INTO product_review (product_id, customer_name, review, rating)
+                    VALUES (%s, %s, %s, %s)
+                    """,
+                         (products.index(product_select)+1, reviewer_name, review_text, score)
+                    )
+                    db_conn.commit()
+    with chat_col:
+        with st.chat_message("robot"):
+            st.write(
+                "Hello. What is your query? I can answer questions about sales, or I can look at customer reviews for you.")
+
+        prompter = st.chat_input("> What is your prompt?")
         if prompt := prompter:
             with st.chat_message("user"):
                 st.write(prompt)
@@ -87,7 +124,6 @@ async def main():
                         # raising error for debug purposes
                         raise e
 
-                    break
             elif "reviews" in result:
                 with st.chat_message("assistant"):
                     try:
@@ -117,6 +153,4 @@ async def main():
                         st.write("Something went wrong!")
                         # raising error for debug purposes
                         raise e
-                    break
-            continue
 asyncio.run(main())
