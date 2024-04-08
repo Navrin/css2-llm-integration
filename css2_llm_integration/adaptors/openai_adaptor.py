@@ -13,9 +13,13 @@ class OpenAIAdaptor(LLMAdaptor):
         self.model = model
         self.client = AsyncOpenAI(api_key=key)
 
-    async def do_query(self, prompt: str, response_json = False) -> str:
+    async def do_query(self, prompt: str, history=None, response_json = False) -> str:
+        if history is None:
+            history = []
+
         response = await self.client.chat.completions.create(
             messages=[
+                *history,
                 {
                     "role": "user",
                     "content": prompt
