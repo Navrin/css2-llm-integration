@@ -12,5 +12,6 @@ for filename in ../example_data/*.csv; do
   table=$(echo "$filename" | cut -d '/' -f 3 | cut -d '-' -f 2 | cut -d '.' -f 1);
   echo "$table"
 
-  psql -v ON_ERROR_STOP=1 -p5432 $DB_NAME -U $DB_USER  -c "\copy $table FROM '$filename' WITH DELIMITER ',' CSV HEADER;";
+  psql -v ON_ERROR_STOP=1 -p5432 $DB_NAME -U $DB_USER  -c "\copy $table FROM '$filename' WITH (FORMAT csv, DELIMITER ',', HEADER MATCH, DEFAULT '<>');";
+
 done

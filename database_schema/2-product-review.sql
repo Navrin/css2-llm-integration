@@ -1,6 +1,6 @@
 CREATE TABLE product_review (
-    id SERIAL PRIMARY KEY UNIQUE,
-    product_id SERIAL REFERENCES product(id),
+    id INTEGER PRIMARY KEY UNIQUE GENERATED ALWAYS AS IDENTITY,
+    product_id INTEGER REFERENCES product(id),
     customer_name varchar(100),
     review VARCHAR NOT NULL,
     rating int NOT NULL,
