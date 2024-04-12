@@ -57,11 +57,11 @@ The instructions here assume some knowledge of using the terminal. If you are on
 1. [Install docker.](https://docs.docker.com/engine/install/)
 2. clone the repo `git clone https://github.com/Navrin/css2-llm-integration.git` (if you do not have git you can install it [here](https://git-scm.com/downloads) or you can manually download the zip file from the github site and extract it, however, this is not recommended as you will not be able to contribute to the project code.)
 3. cd in `cd css2-llm-integration`
-4. __set up your .env file__: `touch .env` and then edit it with whatever program
-5. run docker via `docker compose up`
+4. __set up your .env file__: `touch .env-docker` and then edit it with whatever program
+5. run docker via `docker compose --env-file=.env-docker up`
 
-If you make modifications to the code, you can rebuild the images using `docker compose build`. If you need to clear data, try `docker compose down` or `docker compose rm chat db` and then `docker compose up`.
-When running `docker compose up` you should have a URL that will let you run the app in the browser. 
+If you make modifications to the code, you can rebuild the images using `docker compose --env-file=.env-docker build`. If you need to clear data, try `docker compose --env-file=.env-docker down` or `docker compose --env-file=.env-docker rm chat db` and then `docker compose --env-file=.env-docker up`.
+When running `docker compose --env-file=.env-docker up` you should have a URL that will let you run the app in the browser. 
 
 ### Setting up your .env
 In the project root folder, you will need a `.env`. Here is an example base template. You will need to substitute in variables such as the API token.

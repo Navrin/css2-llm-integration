@@ -37,5 +37,7 @@ services:
     volumes:
       - ./database_schema:/docker-entrypoint-initdb.d/
       - ./example_data:/data
+    env_file:
+      - .env-docker
     #ports:
     #  - "5432:5432"
