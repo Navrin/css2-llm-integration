@@ -5,41 +5,28 @@ import dotenv
 import streamlit as st
 import os
 import adaptors
-from jinja2 import Environment, PackageLoader, select_autoescape
 import psycopg2
 from itertools import chain
+
+from css2_llm_integration.api.api import ChatSession
+from templates import *
 
 dotenv.load_dotenv(f"{os.environ['PROJECT_ROOT']}/.env")
 cfg = dotenv.dotenv_values()
 
 db_conn =  psycopg2.connect(f"host={cfg['DB_HOST']} dbname={cfg['DB_NAME']} user={cfg['DB_USER']} password={cfg['DB_PASSWORD']}")
 
-env = Environment(
-    loader=PackageLoader("css2_llm_integration", "templates"),
-    autoescape=select_autoescape()
-)
-
-sales_gen = env.get_template("sales_translate_user_query.txt")
-sales_format_response = env.get_template("sales_format_data.txt")
-get_question_type = env.get_template("determine_query_kind.txt")
-reviews_gen = env.get_template("reviews_pull_data.txt")
-reviews_analyse = env.get_template("reviews_analyse_reviews.txt")
 
 
-schemas = os.listdir(f"{os.environ['PROJECT_ROOT']}/database_schema")
-#print(schemas)
-all_schemas = []
-for schema in schemas:
-    with open(f"{os.environ['PROJECT_ROOT']}/database_schema/{schema}", "r") as f:
-        all_schemas.append("".join(f.readlines()))
 
+# active_adaptor = adaptors.OpenAIAdaptor()
+device = -1
 
-active_adaptor = adaptors.OpenAIAdaptor()
 if "messages" not in st.session_state:
     st.session_state.messages = []
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+if "active_adaptor" not in st.session_state:
+    st.session_state.active_adaptor = None
+
 if "set" not in st.session_state:
 
     st.set_page_config(layout="wide")
@@ -48,12 +35,11 @@ if "set" not in st.session_state:
 async def main():
     chat_col, input_col = st.columns(2)
 
-    # TODO: separate this code into an API and the UI.
     with db_conn.cursor() as cur:
         cur.execute("SELECT name FROM product")
         product_query = cur.fetchall()
         products = list(chain(*product_query))
-    with input_col:
+    with (input_col):
         with st.form(key="review_form"):
             product_select = st.selectbox("Select a product *", products)
             reviewer_name = st.text_input("Enter reviewer name", value=None)
@@ -75,7 +61,46 @@ async def main():
                          (products.index(product_select)+1, reviewer_name, review_text, score)
                     )
                     db_conn.commit()
+
+        device = st.selectbox("Select device", ["cpu", "cuda:1", "mps"])
+
+        model_choices = {
+            "ChatGPT API": lambda: adaptors.OpenAIAdaptor(),
+            "GPT2": lambda: adaptors.HFAdaptor(model="openai-community/gpt2-xl", device=device),
+            "LLaMa2": lambda: adaptors.HFAdaptor(model="meta-llama/Llama-2-7b-hf", device=device),
+            "Hermes-2-Pro-Mistral-7B": lambda: adaptors.HFAdaptor(model="NousResearch/Hermes-2-Pro-Mistral-7B", device=device),
+        }
+        selected_model = st.selectbox("Select a model", list(model_choices.keys()))
+        st.session_state.active_adaptor = model_choices[(selected_model if selected_model is not None else "ChatGPT API")]()
+
+        with st.form(key="batch_prompts"):
+            json_text = st.text_area("Enter batch prompt in json", placeholder='{\n "prompts": ["what are my best sellers", "what products need improvement", "what stores sell the most Arctic Freezes" ]\n } ')
+            run = st.form_submit_button("Run Batch")
+
+            if run:
+                batch = json.loads(json_text)
+                prompts = batch["prompts"]
+                session = ChatSession(model=st.session_state.active_adaptor, db=db_conn,
+                                      history=st.session_state.messages)
+                batch_response = []
+                for prompt in prompts:
+                    st.session_state.messages = []
+                    runner = session.run_prompt(prompt)
+                    res = []
+                    async for n in runner:
+                        res.append(n)
+
+                    batch_response.append({
+                        "prompt": prompt,
+                        "response": res[-1]
+                    })
+                st.json(batch_response)
+
     with chat_col:
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+
         with st.chat_message("robot"):
             st.write(
                 "Hello. What is your query? I can answer questions about sales, or I can look at customer reviews for you.")
@@ -84,73 +109,25 @@ async def main():
         if prompt := prompter:
             with st.chat_message("user"):
                 st.write(prompt)
-            st.session_state.messages.append({"role": "user", "content": prompt})
+            st.session_state.messages.append({"role": "user", "content": prompt, "ignore": True})
 
-            question_type_prompt = get_question_type.render(user_prompt=prompt)
-            result = await active_adaptor.do_query(question_type_prompt, history=st.session_state.messages)
-            result = result.lower()
+            session = ChatSession(model=st.session_state.active_adaptor, db=db_conn, history=st.session_state.messages)
+            runner = session.run_prompt(prompt)
+
             with st.chat_message("assistant"):
-                ai_msg = f"Based on this query, I think you are asking about: {result}."
+                ai_msg = await anext(runner)
                 st.markdown(ai_msg)
                 st.session_state.messages.append({"role": "assistant", "content": ai_msg})
 
+                try:
+                    st.json(await anext(runner))
+                    st.json(await anext(runner))
+                    end_answer = await anext(runner)
+                    st.session_state.messages.append({"role": "assistant", "content": end_answer})
 
-
-            if "sales" in result:
-                with st.chat_message("assistant"):
-                    try:
-                        sales_sql_prompt = sales_gen.render(user_prompt=prompt, db_schema="\n\n".join(all_schemas))
-                        sales_sql = await active_adaptor.do_query(
-                            sales_sql_prompt,
-                            response_json=True,
-                            history=st.session_state.messages
-                        )
-                        query_json = json.loads(sales_sql)
-                        st.json(query_json)
-                        with db_conn.cursor() as cur:
-                            cur.execute(query_json["query"])
-                            results = cur.fetchall()
-                        as_json = json.dumps(results, indent=4)
-                        st.json(as_json)
-                        end_response_prompt = sales_format_response.render(user_prompt=prompt, json=as_json)
-
-                        end_answer = await active_adaptor.do_query(end_response_prompt, history=st.session_state.messages)
-                        st.session_state.messages.append({"role": "assistant", "content": end_answer})
-
-
-                        st.write(end_answer)
-                    except Exception as e:
-                        st.write("Something went wrong!")
-                        # raising error for debug purposes
-                        raise e
-
-            elif "reviews" in result:
-                with st.chat_message("assistant"):
-                    try:
-                        reviews_sql_prompt = reviews_gen.render(user_prompt=prompt, db_schema="\n\n".join(all_schemas))
-                        reviews_sql = await active_adaptor.do_query(
-                            reviews_sql_prompt,
-                            response_json=True,
-                            history=st.session_state.messages
-                        )
-                        query_json = json.loads(reviews_sql)
-                        st.json(query_json)
-                        with db_conn.cursor() as cur:
-                            cur.execute(query_json["query"])
-                            results = cur.fetchall()
-                        as_json = json.dumps(results, indent=4)
-                        # st.json(as_json)
-                        end_response_prompt = reviews_analyse.render(user_prompt=prompt, reviews=as_json)
-
-                        end_answer = await active_adaptor.do_query(
-                            end_response_prompt,
-                            history=st.session_state.messages
-                        )
-                        st.session_state.messages.append({"role": "assistant", "content": end_answer})
-
-                        st.write(end_answer)
-                    except Exception as e:
-                        st.write("Something went wrong!")
-                        # raising error for debug purposes
-                        raise e
+                    st.write(end_answer)
+                except Exception as e:
+                    st.write("Something went wrong!")
+                    # raising error for debug purposes
+                    raise e
 asyncio.run(main())
