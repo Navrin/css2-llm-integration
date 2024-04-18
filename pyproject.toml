@@ -16,6 +16,7 @@ simplejson = "^3.19.2"
 transformers = "^4.39.3"
 tensorflow = "^2.16.1"
 tf-keras = "^2.16.0"
+torch = "^2.2.2"
 
 
 [build-system]
