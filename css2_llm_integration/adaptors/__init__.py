@@ -1,1 +1,2 @@
 from css2_llm_integration.adaptors.openai_adaptor import OpenAIAdaptor
+from css2_llm_integration.adaptors.hf_adaptor import HFAdaptor
