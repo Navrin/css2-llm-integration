@@ -120,6 +120,9 @@ async def main():
 
     with chat_col:
         for message in st.session_state.messages:
+            if message["role"] not in ["assistant", "user"]:
+                continue
+
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
 
@@ -131,19 +134,20 @@ async def main():
         if prompt_in := prompter:
             with st.chat_message("user"):
                 st.write(prompt_in)
-            st.session_state.messages.append({"role": "user", "content": prompt_in, "ignore": True})
-
             session = ChatSession(model=active_adaptor, db=db_conn, history=st.session_state.messages)
             runner = session.run_prompt(prompt_in)
 
-            with st.chat_message("assistant"):
-                ai_msg = await anext(runner)
-                st.markdown(ai_msg)
-                st.session_state.messages.append({"role": "assistant", "content": ai_msg})
+            st.session_state.messages.append({"role": "user", "content": prompt_in})
 
+
+            with st.chat_message("assistant"):
+                # ai_msg = await anext(runner)
+                # st.markdown(ai_msg)
+                # st.session_state.messages.append({"role": "assistant", "content": ai_msg})
+                #
                 try:
-                    st.json(await anext(runner))
-                    st.json(await anext(runner))
+                    # st.json(await anext(runner))
+                    # st.json(await anext(runner))
                     end_answer = await anext(runner)
                     st.session_state.messages.append({"role": "assistant", "content": end_answer})
 

@@ -8,7 +8,8 @@ import psycopg2
 
 class ChatSession:
     def get_prompt_history(self):
-        return [msg for msg in self.history if "ignore" not in msg or not msg["ignore"]]
+        # return [msg for msg in self.history if "ignore" not in msg or not msg["ignore"]]
+        return self.history
 
     def __init__(self, model: LLMAdaptor, db, history: t.List[HistoryMessage]):
         self.model = model
@@ -16,23 +17,25 @@ class ChatSession:
         self.history = history
 
     async def run_prompt(self, prompt: str):
-        question_type_prompt = get_question_type.render(user_prompt=prompt)
-        result = await self.model.do_query(question_type_prompt, history=self.get_prompt_history())
-        result = result.lower()
+        # question_type_prompt = get_question_type.render(user_prompt=prompt)
+        # result = await self.model.do_query(question_type_prompt, history=self.get_prompt_history())
+        # result = result.lower()
 
-        ai_msg = f"Based on this query, I think you are asking about: {result}."
-        yield ai_msg
+        answer = await self.model.do_query(prompt, history=self.get_prompt_history())
 
-        try:
-            if "sales" in result:
-                async for m in self.run_sales_prompt(prompt):
-                    yield m
-            elif "reviews" in result:
-                async for m in self.run_reviews_prompt(prompt):
-                    yield m
-        except Exception as e:
-            raise e
+        #ai_msg = f"Based on this query, I think you are asking about: {result}."
+        #yield ai_msg
 
+        # try:
+        #     if "sales" in result:
+        #         async for m in self.run_sales_prompt(prompt):
+        #             yield m
+        #     elif "reviews" in result:
+        #         async for m in self.run_reviews_prompt(prompt):
+        #             yield m
+        # except Exception as e:
+        #     raise e
+        yield answer
 
     async def run_sales_prompt(self, prompt: str):
         sales_sql_prompt = sales_gen.render(user_prompt=prompt, db_schema="\n\n".join(all_schemas))

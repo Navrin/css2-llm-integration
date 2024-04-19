@@ -70,6 +70,46 @@ test = ["anyio[trio]", "coverage[toml] (>=7)", "exceptiongroup (>=1.2.0)", "hypo
 trio = ["trio (>=0.23)"]
 
 [[package]]
+name = "ariadne"
+version = "0.23.0"
+description = "Ariadne is a Python library for implementing GraphQL servers."
+optional = false
+python-versions = "*"
+files = [
+    {file = "ariadne-0.23.0-py2.py3-none-any.whl", hash = "sha256:594206e4fc20fa05d6872f0ccd6e3aafe0575b9da36945211762445126b28bcb"},
+    {file = "ariadne-0.23.0.tar.gz", hash = "sha256:84c46ae27fad98e1a6553c8930e6fc8e755f8dcd54a959d33caf04ecfe026a93"},
+]
+
+[package.dependencies]
+graphql-core = ">=3.2.0,<3.3"
+starlette = ">0.17,<1.0"
+typing-extensions = ">=3.6.0"
+
+[package.extras]
+asgi-file-uploads = ["python-multipart (>=0.0.5)"]
+dev = ["black", "mypy", "pylint"]
+telemetry = ["opentelemetry-api"]
+test = ["aiodataloader", "freezegun", "graphql-sync-dataloaders", "httpx", "opentelemetry-api", "opentracing", "pytest", "pytest-asyncio", "pytest-benchmark", "pytest-cov", "pytest-mock", "python-multipart (>=0.0.5)", "syrupy", "werkzeug"]
+tracing = ["opentracing"]
+
+[[package]]
+name = "ariadne-graphql-modules"
+version = "0.8.0"
+description = "Ariadne toolkit for defining GraphQL schemas in modular fashion."
+optional = false
+python-versions = "*"
+files = [
+    {file = "ariadne_graphql_modules-0.8.0-py2.py3-none-any.whl", hash = "sha256:f78e259b94f458006525e27771560c1f7b6c686ab1b12e6e09bb02938d909c87"},
+    {file = "ariadne_graphql_modules-0.8.0.tar.gz", hash = "sha256:cd0bf120cf189f7dcdca4841a56f9abb2b15ca67a96714dd73036c27248d84f3"},
+]
+
+[package.dependencies]
+ariadne = ">=0.22.0"
+
+[package.extras]
+test = ["black", "mypy", "pylint", "pytest", "pytest-asyncio", "snapshottest"]
+
+[[package]]
 name = "astunparse"
 version = "1.6.3"
 description = "An AST unparser for Python"
@@ -404,6 +444,17 @@ files = [
 
 [package.dependencies]
 six = "*"
+
+[[package]]
+name = "graphql-core"
+version = "3.2.3"
+description = "GraphQL implementation for Python, a port of GraphQL.js, the JavaScript reference implementation for GraphQL."
+optional = false
+python-versions = ">=3.6,<4"
+files = [
+    {file = "graphql-core-3.2.3.tar.gz", hash = "sha256:06d2aad0ac723e35b1cb47885d3e5c45e956a53bc1b209a9fc5369007fe46676"},
+    {file = "graphql_core-3.2.3-py3-none-any.whl", hash = "sha256:5766780452bd5ec8ba133f8bf287dc92713e3868ddd83aee4faab9fc3e303dc3"},
+]
 
 [[package]]
 name = "grpcio"
@@ -2286,6 +2337,23 @@ files = [
 ]
 
 [[package]]
+name = "starlette"
+version = "0.37.2"
+description = "The little ASGI library that shines."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "starlette-0.37.2-py3-none-any.whl", hash = "sha256:6fe59f29268538e5d0d182f2791a479a0c64638e6935d1c6989e63fb2699c6ee"},
+    {file = "starlette-0.37.2.tar.gz", hash = "sha256:9af890290133b79fc3db55474ade20f6220a364a0402e0b556e7cd5e1e093823"},
+]
+
+[package.dependencies]
+anyio = ">=3.4.0,<5"
+
+[package.extras]
+full = ["httpx (>=0.22.0)", "itsdangerous", "jinja2", "python-multipart (>=0.0.7)", "pyyaml"]
+
+[[package]]
 name = "streamlit"
 version = "1.32.2"
 description = "A faster way to build and share data apps"
@@ -3028,4 +3096,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "c979c7ee1d220cc20b4a6f02d1fe89d43e1677dc48c5e6037c02f2c9cf467e62"
+content-hash = "39f62563ab37b9a3719cb4c8f1ff1671afeb4432353bb7b5d823aa89da206cc2"

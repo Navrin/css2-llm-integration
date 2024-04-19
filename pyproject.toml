@@ -17,6 +17,8 @@ transformers = "^4.39.3"
 tensorflow = "^2.16.1"
 tf-keras = "^2.16.0"
 torch = "^2.2.2"
+ariadne = "^0.23.0"
+ariadne-graphql-modules = "^0.8.0"
 
 
 [build-system]
