@@ -1,4 +1,4 @@
-id,product_id,customer_name,review,rating
+id,product_id,name,review,rating
 <>,1,Alice,Absolutely loved the Arctic Freeze Blueberry Shake! It's so refreshing and the blueberry flavor is just perfect.,5
 <>,1,Bob,The Arctic Freeze Blueberry Shake was okay. I expected a stronger blueberry flavor though.,3
 <>,2,Charlie,Bubble Blast Bubble Tea is my new favorite drink! The tapioca pearls add such a fun texture to the tea.,5

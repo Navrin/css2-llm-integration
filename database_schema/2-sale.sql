@@ -9,7 +9,6 @@ CREATE TABLE sale_item (
     sale_id INTEGER REFERENCES sale(id),
     product_id INTEGER REFERENCES product(id),
     quantity INTEGER
---     CONSTRAINT sale_item_pk PRIMARY KEY (sale_id, product_id)
 );
 
 CREATE TABLE sale_item_modifier (

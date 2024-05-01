@@ -16,6 +16,9 @@ reviews_analyse = env.get_template("reviews_analyse_reviews.txt")
 schemas = os.listdir(f"{os.environ['PROJECT_ROOT']}/database_schema")
 all_schemas = []
 for schema in schemas:
+    if schema.startswith("00") or schema.startswith("99"):
+        continue
+
     with open(f"{os.environ['PROJECT_ROOT']}/database_schema/{schema}", "r") as f:
         all_schemas.append("".join(f.readlines()))
 

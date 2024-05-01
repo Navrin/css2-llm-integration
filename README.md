@@ -66,13 +66,21 @@ When running `docker compose --env-file=.env-docker up` you should have a URL th
 ### Setting up your .env
 In the project root folder, you will need a `.env`. Here is an example base template. You will need to substitute in variables such as the API token.
 
-__If you are using docker, name your file `.env-docker`__. The docker compose file mount `.env-docker` as `.env`. This is because the `.env` files will differ slightly if you are hosting the bot directly (i.e local postgres). The example template will work for the docker version.
+~~__If you are using docker, name your file `.env-docker`__. The docker compose file mount `.env-docker` as `.env`. This is because the `.env` files will differ slightly if you are hosting the bot directly (i.e local postgres). The example template will work for the docker version.~~
+`.env-docker` is no longer needed! Just make sure you set up your regular `.env` properly.
 ```
-OPENAI_KEY=<OPEN AI KEY GOES HERE>
+OPENAI_KEY=<OPENAI KEY>
+OR_KEY=<OPENROUTER KEY>
 DB_NAME=css2_llm
-DB_HOST=postgres
+DB_HOST="${DB_HOST:-0.0.0.0}"
 DB_PASSWORD=password
-DB_USER=css2_llm
+DB_USER=postgres
+PROJECT_ROOT=<PROJECT ROOT HERE (use pwd in the root directory)>
+DB_DATA_FOLDER="${PROJECT_ROOT}/example_data"
+
+POSTGRES_USER=${DB_USER}
+POSTGRES_PASSWORD=${DB_PASSWORD}
+POSTGRES_DB=${DB_NAME}
 ```
 ## Example Database Items
 
