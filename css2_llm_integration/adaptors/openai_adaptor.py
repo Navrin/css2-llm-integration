@@ -1,70 +1,59 @@
-import json
+from typing import Optional
 
-from css2_llm_integration.adaptors.tool_calling import get_tools_with_schema
+from css2_llm_integration.data_layer.tool_calling import ToolProvider
 from css2_llm_integration.llm_adaptor import LLMAdaptor
-from dotenv import dotenv_values
 from openai import AsyncOpenAI
-from transformers import pipeline
 
-import psycopg2
 import os
-
-from css2_llm_integration.templates import all_schemas
 
 
 class OpenAIAdaptor(LLMAdaptor):
     client: AsyncOpenAI
+    tool_provider: ToolProvider
 
-    def __init__(self, model="gpt-3.5-turbo"):
-        cfg = dotenv_values(f"{os.environ['PROJECT_ROOT']}/.env")
-        key = cfg["OPENAI_KEY"]
+    def __init__(self,
+                 tool_provider: ToolProvider,
+                 use_openrouter=False, model="openai/gpt-3.5-turbo",
+                 seed_all: Optional[int] = None):
+        if use_openrouter:
+            key = os.getenv("OR_KEY")
+            self.client = AsyncOpenAI(
+                api_key=key,
+                base_url="https://openrouter.ai/api/v1",
+            )
+        else:
+            key = os.getenv("OPENAI_KEY")
+            self.client = AsyncOpenAI(api_key=key)
         self.model = model
-        self.client = AsyncOpenAI(api_key=key)
-        # self.sql_gen = pipeline("text-generation", model="chatdb/natural-sql-7b")
-        self.db_conn = psycopg2.connect(
-            f"host={cfg['DB_HOST']} dbname={cfg['DB_NAME']} user={cfg['DB_USER']} password={cfg['DB_PASSWORD']}")
+        self.tool_provider = tool_provider
+        self.seed = seed_all
 
-    async def do_query(self, prompt: str, history, response_json=False, tool_query_max=5) -> str:
-
+    async def do_query(self, prompt: str, history, response_json=False, tool_query_max=5, is_tool_call=False) -> str:
+        if not is_tool_call:
+            history.append({
+                "role": "user",
+                "content": prompt
+            })
         response = await self.client.chat.completions.create(
-            messages=[
-                *history,
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ],
+            messages=history,
             response_format={"type": "json_object"} if response_json else None,
-            tools=get_tools_with_schema("\n".join(all_schemas)),
+            tools=self.tool_provider.generate_tools(),
             tool_choice="auto" if tool_query_max > 0 else "none",
-            model=self.model
+            model=self.model,
+            seed=self.seed,
         )
-        print(f"response: == {response=}")
+        #print(f"response: == {response=}")
         choice = response.choices[0]
 
+
         if choice.finish_reason == "tool_calls" and tool_query_max > 0:
-            print("doing tool calls!")
             for tool_call in choice.message.tool_calls:
-                if tool_call.function.name == "query_database":
-                    print(tool_call)
-                    question = json.loads(tool_call.function.arguments)["query"]
-                    # sql = await self.generate_sql(question)
-                    # tmp
-                    with self.db_conn.cursor() as cur:
-                        cur.execute(question)
-                        results = cur.fetchall()
-
-                    history.append({
-                        "role": "function",
-                        "tool_call_id": tool_call.id,
-                        "name": tool_call.function.name,
-                        "content": str(results),
-                        #"ignore": True,
-                    })
-            return await self.do_query(prompt, history, response_json, tool_query_max - 1)
-        print(history)
-        print(response)
+                history.append(await self.tool_provider.run_tool_call(tool_call))
+            return await self.do_query(prompt, history, response_json, tool_query_max - 1, is_tool_call=True)
+        # print(history)
+        # print(response)
+        history.append({
+            "role": "assistant",
+            "content": choice.message.content
+        })
         return response.choices[0].message.content
-
-    async def generate_sql(self, prompt: str):
-        return self.sql_gen(prompt, return_text=True)
