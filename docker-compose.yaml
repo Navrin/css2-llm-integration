@@ -1,6 +1,7 @@
 services:
   chat:
     image: navrin/css2chat
+    build: .
 #    user: css2_llm
     ports:
       - "8501:8501"
@@ -20,6 +21,9 @@ services:
 
   db:
     image: "postgres:16.2-bookworm"
+    build:
+      dockerfile: Dockerfile-postgres
+      context: .
     shm_size: 128mb
     restart: always
     env_file:

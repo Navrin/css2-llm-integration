@@ -41,7 +41,7 @@ class ContextManager:
             await cursor.execute(
                 "INSERT INTO product_review (product_id, name, review, rating) VALUES (%s, %s, %s, %s)", (
                     review.product_id,
-                    review.name,
+                    review.customer_name,
                     review.review,
                     review.score
                 ))
