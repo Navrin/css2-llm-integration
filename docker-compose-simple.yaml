@@ -19,13 +19,8 @@ services:
        - .env
 
   db:
-    image: "postgres:16.2-bookworm"
+    image: navrin/css2db
     shm_size: 128mb
     restart: always
     env_file:
       - .env
-    volumes:
-      - ./database_schema:/docker-entrypoint-initdb.d/
-      - ./example_data:/data
-    #ports:
-    #  - "5432:5432"

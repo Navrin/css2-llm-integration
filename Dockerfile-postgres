@@ -1,0 +1,3 @@
+FROM postgres:16.2-bookworm
+COPY ./database_schema /docker-entrypoint-initdb.d/
+COPY ./example_data /data
